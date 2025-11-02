@@ -49,4 +49,39 @@ def attempt_open_treasure(game_state):
             else:
                 print("Вы отступаете от сундука.")
 
+def pseudo_random(seed, modulo):
+    from math import floor, sin
+    spread_result = sin(seed*12.9898)*43758.5453
+    fractor_part = spread_result - floor(spread_result)
+    return floor(fractor_part*modulo)
 
+def trigger_trap(game_state):
+    print("Ловушка активирована! С потолка летит град из стрел!")
+    inventar = game_state["player_inventar"]
+    if len(inventar) > 0:
+        item_index = pseudo_random(game_state["steps_taken"], len(inventar))
+        print("О нет, из рюкзака выпал предмет: ", inventar[item_index])
+        game_state["player_inventar"].remove[item_index]
+    else:
+        print("Стрела попала по вам!")
+        if pseudo_random(game_state["steps_taken"], 9) < 3:
+            print("К сожалению, вы не уцелели. Игра окончена")
+        else:
+            print("Но вы уцелели!")
+
+def random_event(game_state):
+    if pseudo_random(game_state["steps_taken"], 10) == 0:
+        match pseudo_random(game_state["steps_taken"], 2):
+            case 0: 
+                print("Находка! Вы нашли монету (coin)!")
+                game_state["player_inventory"].append("coin")
+            case 1:
+                print("Из темноты доносится шорох.")
+                if "sword" in game_state["player_inventory"]:
+                    print("Кем бы оно ни было, вы его отпугнули мечом")
+            case 2:
+                trap_check = game_state["current_room"] == "trap_room"
+                torch_check = not( "torch" in game_state["player_inventory"])
+                if trap_check and torch_check:
+                    print("Ловушка!")
+                    trigger_trap(game_state)
