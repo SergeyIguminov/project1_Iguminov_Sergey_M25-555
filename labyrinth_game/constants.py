@@ -1,0 +1,82 @@
+ROOMS = {
+    "entrance": {
+        "description": "Вы в темном входе лабиринта. Стены покрыты мхом. На полу лежит старый факел.",
+        "exits": {"north": "hall", "east": "trap_room"},
+        "items": ["torch"],
+        "puzzle": None,
+        "reward": None,
+    },
+    "hall": {
+        "description": "Большой зал с эхом. По центру стоит пьедестал с запечатанным сундуком.",
+        "exits": {"south": "entrance", "west": "library", "north": "treasure_room"},
+        "items": [],
+        "puzzle": (
+            'На пьедестале надпись: "Назовите число, которое идет после девяти". Введите ответ цифрой или словом.',
+            "10",
+        ),
+        "reward": "treasure",
+    },
+    "trap_room": {
+        "description": 'Комната с хитрой плиточной поломкой. На стене видна надпись: "Осторожно — ловушка".',
+        "exits": {"west": "entrance"},
+        "items": ["rusty_key"],
+        "puzzle": (
+            'Система плит активна. Чтобы пройти, назовите слово "шаг" три раза подряд (введите "шаг шаг шаг")',
+            "шаг шаг шаг",
+        ),
+        "reward": None,
+    },
+    "library": {
+        "description": "Пыльная библиотека. На полках старые свитки. Где-то здесь может быть ключ от сокровищницы.",
+        "exits": {"east": "hall", "north": "armory"},
+        "items": ["ancient_book"],
+        "puzzle": (
+            'В одном свитке загадка: "Что растет, когда его съедают?" (ответ одно слово)',
+            "резонанс",
+        ),
+        "reward": "scroll_of_wisdom",
+    },
+    "armory": {
+        "description": "Старая оружейная комната. На стене висит меч, рядом — небольшая бронзовая шкатулка.",
+        "exits": {"south": "library"},
+        "items": ["sword", "bronze_box"],
+        "puzzle": None,
+    },
+    "treasure_room": {
+        "description": "Комната, на столе большой сундук. Дверь заперта — нужен особый ключ.",
+        "exits": {"south": "hall", "north": "throne_room"},
+        "items": ["treasure_chest"],
+        "puzzle": (
+            "Дверь защищена кодом. Введите код (подсказка: это число пятикратного шага, 2*5= ? )",
+            "10",
+        ),
+        "reward": "treasure",
+    },
+    "throne_room": {
+        "description": "Большой зал, в центре стоит большой королевский трон, к которому подходит красная коврова дорожка",
+        "exits": {
+            "south": "treasure_room",
+            "east": "sleep_room",
+            "west": "knights_room",
+        },
+        "items": [],
+        "puzzle": None,
+        "reward": None,
+    },
+    "knights_room": {
+        "description": "Комната, где отдыхают рыцари-охранники.",
+        "exits": {"east": "throne_room", "south": "armoury"},
+        "puzzle": (
+            'Тебе повезло - все рыцари спят. Не разбуди их. Назови слово "шаг" три раза подряд (введите "шаг шаг шаг")',
+            "шаг шаг шаг",
+        ),
+        "reward": None
+    },
+    "sleep_room": {
+        "description": "Большая спальня с дорого кроватью с бархатным балдахином. Рядом с ней стоит канделябр со свечами",
+        "exits": {"west": "throne_room"},
+        "items": ["candle"],
+        "puzzle": None,
+        "reward": None
+    },
+}
