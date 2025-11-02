@@ -30,6 +30,14 @@ def process_command(game_state, command):
             player_actions.use_item(game_state, command_attribute)
         case "go":
             player_actions.move_player(game_state, command_attribute)
+        case "north":
+            player_actions.move_player(game_state, command_name)
+        case "south":
+            player_actions.move_player(game_state, command_name)
+        case "west":
+            player_actions.move_player(game_state, command_name)
+        case "east":
+            player_actions.move_player(game_state, command_name)
         case "take":
             player_actions.take_item(game_state, command_attribute)
         case "inventory":
@@ -44,6 +52,8 @@ def process_command(game_state, command):
                 utils.solve_puzzle(game_state)
         case "quit":
             game_state["game_over"] = True
+        case "help":
+            utils.show_help()
 
 
 if __name__ == "__main__":

@@ -19,10 +19,21 @@ def move_player(game_state, direction):
     current_room = constants.ROOMS[game_state["current_room"]]
     if direction in ['north', 'south', 'east', 'west']:
         if direction in list(current_room["exits"].keys()):
-            game_state['current_room'] = current_room['exits'][direction]
-            game_state['steps_taken'] += 1
-            utils.describe_current_room(game_state)
-            utils.random_event(game_state)
+            if current_room["exits"][direction] == "treasure_room":
+                if "rusty_key" in game_state["player_inventory"]:
+                    print("Вы используете найденный ключ,"+
+                          " чтобы открыть путь в комнату сокровищ.")
+                    game_state['current_room'] = current_room['exits'][direction]
+                    game_state['steps_taken'] += 1
+                    utils.describe_current_room(game_state)
+                    utils.random_event(game_state)
+                else:
+                    print("Дверь заперта. Нужен ключ, чтобы пройти дальше.")
+            else:
+                game_state['current_room'] = current_room['exits'][direction]
+                game_state['steps_taken'] += 1
+                utils.describe_current_room(game_state)
+                utils.random_event(game_state)
         else:
             print("Нельзя пойти в этом направлении.")
     else:

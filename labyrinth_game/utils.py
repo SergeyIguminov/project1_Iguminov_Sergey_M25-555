@@ -19,13 +19,19 @@ def solve_puzzle(game_state):
     else:
         print(puzzle[0])
         answer = input("Ваш ответ: ")
-        if answer == puzzle[1]:
+        if answer in puzzle[1]:
             print("Вы справились с этим испытанием!")
             constants.ROOMS[game_state["current_room"]]["puzzle"] = None
             if constants.ROOMS[game_state["current_room"]]["reward"] is not None:
                 game_state["player_inventory"].append(constants.ROOMS[game_state["current_room"]]["reward"])
         else:
+            if game_state["current_room"] == "trap_room":
+                trigger_trap(game_state)
             print("Неверно. Попробуйте снова.")
+
+def show_help():
+    for key in constants.COMMANDS.keys():
+                print(key, constants.COMMANDS["key"], sep=" - ")
 
 def attempt_open_treasure(game_state):
     current_room = constants.ROOMS[game_state["current_room"]]
@@ -42,7 +48,7 @@ def attempt_open_treasure(game_state):
             if input("> ") == "да":
                 if current_room["puzzle"] is not None:
                     solve_puzzle(game_state)
-                    if current_room["puzzle"] == None:
+                    if current_room["puzzle"] is None:
                         print("Сундук открыт!")
                         print("В сундуке сокровище! Вы победили!")
                         game_state["game_over"]=True
@@ -81,7 +87,7 @@ def random_event(game_state):
                     print("Кем бы оно ни было, вы его отпугнули мечом")
             case 2:
                 trap_check = game_state["current_room"] == "trap_room"
-                torch_check = not( "torch" in game_state["player_inventory"])
+                torch_check =  "torch" not in game_state["player_inventory"]
                 if trap_check and torch_check:
                     print("Ловушка!")
                     trigger_trap(game_state)
