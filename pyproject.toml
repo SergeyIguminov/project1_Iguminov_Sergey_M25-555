@@ -1,0 +1,21 @@
+[tool.poetry]
+name = "project1-iguminov-sergey-m25-555"
+version = "0.1.0"
+description = ""
+authors = [
+    "Sergey Iguminov <Sergey.iguminov@yandex.ru>"
+]
+readme = "README.md"
+packages = [
+    { include = "labyrinth_game", from = "." }
+]
+
+[tool.poetry.dependencies]
+python = "^3.13"
+
+[tool.poetry.scripts]
+project = "labyrinth_game.main:main"
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
