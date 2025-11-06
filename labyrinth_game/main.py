@@ -20,6 +20,12 @@ def main():
 
 
 def process_command(game_state, command):
+    """
+    Функция обработки команды
+    Сравнивает введенную команду со списком возможных и вызывает соответствующую функцию
+
+    Аргументы: состояние игры и команда
+    """
     command_name = command.split()[0]
     if len(command.split()) > 1:
         command_attribute = command.split()[1]

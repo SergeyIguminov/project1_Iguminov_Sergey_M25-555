@@ -2,6 +2,13 @@ from . import constants
 
 
 def describe_current_room(game_state):
+    """
+    Функция описания текущей комнаты
+
+    Аргументы: состояние игры (из main.py). 
+
+    Возвращает: описание комнаты из файла constants.py, а также видимые в комнате предметы и есть ли загадки в комнате. 
+    """
     current_room = constants.ROOMS[game_state["current_room"]]
     print("==" + game_state["current_room"] + "==")
     print(current_room["description"])
@@ -13,6 +20,12 @@ def describe_current_room(game_state):
         print("Кажется, здесь есть загадка (используйте команду solve).")
 
 def solve_puzzle(game_state):
+    """
+    Функция решения пазла
+    Аргументы: состояние игры (из main.py)
+    Выводит загадку хронящуюся в constants.py и запрашивает у игрока ответ.
+    При верном ответе выдаёт награду.
+    """
     puzzle = constants.ROOMS[game_state["current_room"]]["puzzle"]
     if puzzle is None:
         print("Загадок здесь нет")
@@ -30,10 +43,20 @@ def solve_puzzle(game_state):
             print("Неверно. Попробуйте снова.")
 
 def show_help():
-    for key in constants.COMMANDS.keys():
-                print(key, constants.COMMANDS["key"], sep=" - ")
+    """
+    Функция справки
+    Выводит на экран команды доступные игроку
+    """
+    for key in list(constants.COMMANDS.keys()):
+                print(key, constants.COMMANDS[key], sep=" - ")
 
 def attempt_open_treasure(game_state):
+    """
+    Функция попытки открыть сокровище (финал игры)
+    Проверяет условие чтобы игровой персонаж имел ключ от сундука и находился в treasure room.
+    Также может как альтернативу предложить решение загадки. 
+    При успешном открытии - уведомляет о выйгрыше и заканчивает игру.
+    """
     current_room = constants.ROOMS[game_state["current_room"]]
     if game_state["current_room"] == "treasure_room":
         if "treasure_key" in game_state["player_inventory"]:
@@ -56,28 +79,54 @@ def attempt_open_treasure(game_state):
                 print("Вы отступаете от сундука.")
 
 def pseudo_random(seed, modulo):
+    """
+    Функция вызова случайны чисел. 
+    Использует формулу синуса с большими числами.
+
+    Аргументы: seed - любое число. modulo - предел максимального числа, которое может сгенерироваться.
+
+    Возвращает: Целое число (int)
+    """
     from math import floor, sin
     spread_result = sin(seed*12.9898)*43758.5453
     fractor_part = spread_result - floor(spread_result)
     return floor(fractor_part*modulo)
 
 def trigger_trap(game_state):
+    """
+    Функция активации ловушки
+    Реализуют логику выпадения вещей из инвентаря если он там есть, либо нанесение урона игроку.
+    Внутри себя использует функцию pseudo_random
+
+    Аргемунты: состояние игры из main.py
+    """
     print("Ловушка активирована! С потолка летит град из стрел!")
-    inventar = game_state["player_inventar"]
-    if len(inventar) > 0:
-        item_index = pseudo_random(game_state["steps_taken"], len(inventar))
-        print("О нет, из рюкзака выпал предмет: ", inventar[item_index])
-        game_state["player_inventar"].remove[item_index]
+    inventory = game_state["player_inventory"].copy()
+    if len(inventory) > 0:
+        item_index = pseudo_random(game_state["steps_taken"], len(inventory)-1)
+        print("О нет, из рюкзака выпал предмет: ", inventory[item_index])
+        game_state["player_inventory"].remove(inventory[item_index])
     else:
         print("Стрела попала по вам!")
-        if pseudo_random(game_state["steps_taken"], 9) < 3:
+        MODUL_OF_RANDOM = 9
+        CHANCE_OF_GAME_OVER = 3
+        if pseudo_random(game_state["steps_taken"], MODUL_OF_RANDOM) < CHANCE_OF_GAME_OVER:
             print("К сожалению, вы не уцелели. Игра окончена")
         else:
             print("Но вы уцелели!")
 
 def random_event(game_state):
-    if pseudo_random(game_state["steps_taken"], 10) == 0:
-        match pseudo_random(game_state["steps_taken"], 2):
+    """
+    Функция  случайных событий при переходе между локациями. 
+    Вызывает одно из 3 случайных событий.
+
+    Аргументы: состояние игры из main.py
+    """
+    MODUL_OF_RANDOM = 10
+    CHANCE_OF_RANDOM_EVENT = 0
+    if pseudo_random(game_state["steps_taken"], MODUL_OF_RANDOM) == CHANCE_OF_RANDOM_EVENT:
+        NUMBER_OF_RANDOM_EVENT = 2
+        match pseudo_random(game_state["steps_taken"], NUMBER_OF_RANDOM_EVENT):
             case 0: 
                 print("Находка! Вы нашли монету (coin)!")
                 game_state["player_inventory"].append("coin")
