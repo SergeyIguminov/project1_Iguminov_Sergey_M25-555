@@ -24,8 +24,16 @@ Labyrinth Game
 git clone https://github.com/SergeyIguminov/project1_Iguminov_Sergey_M25-555.git
 cd project1_Iguminov_Sergey_M25-555
 
-# Установите зависимости через Poetry
+Команды разработки
+
+# Установка зависимостей
 poetry install
 
-# Или используйте Makefile
-make install
+# Запуск игры
+poetry run project
+
+# Проверка стиля кода
+ruff check .
+
+# Сборка пакета
+poetry build

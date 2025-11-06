@@ -15,6 +15,7 @@ python = "^3.13"
 
 [tool.poetry.group.dev.dependencies]
 ruff= "^0.1.0"
+asciinema = "^2.4.0"
 
 [tool.poetry.scripts]
 project = "labyrinth_game.main:main"
